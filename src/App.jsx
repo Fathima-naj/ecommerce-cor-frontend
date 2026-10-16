@@ -20,6 +20,7 @@ import AdminProductList from "./admin/ProductList";
 
 import { getProfile } from "./redux/userSlice";
 import "./App.css";
+import Cart from "./components/Cart";
 
 export default function App() {
     const dispatch = useDispatch();
@@ -47,6 +48,12 @@ export default function App() {
                                     <h1>My Profile</h1>
                                 </main>
                             }
+                        />
+                        <Route
+                        path="/cart"
+                        element={
+                            <Cart/>
+                        }
                         />
                         
                     </Route>

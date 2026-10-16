@@ -3,11 +3,16 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProduct } from "../redux/productSlice";
+import { addToCart } from "../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 function ProductList() {
     const { products, loading, error } = useSelector(
         (state) => state.product
     );
+const navigate = useNavigate();
+
+const { user } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
 
@@ -111,6 +116,25 @@ function ProductList() {
                                             View details
                                         </Link>
                                     </div>
+                                    <button
+    type="button"
+    onClick={() => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
+        dispatch(
+            addToCart({
+                productId: product._id,
+                quantity: 1,
+            })
+        );
+    }}
+    className="mt-3 w-full rounded-lg bg-black px-4 py-2.5 font-medium text-white transition hover:bg-gray-800"
+>
+    Add to Cart
+</button>
                                 </div>
                             </article>
                         ))}

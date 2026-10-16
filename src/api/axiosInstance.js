@@ -9,33 +9,47 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+
 axiosInstance.interceptors.response.use(
-  (response) => response,
+    (response) => response,
 
-  async (error) => {
-    const originalRequest = error.config;
+    async (error) => {
+        const originalRequest = error.config;
+        const url = originalRequest?.url || "";
 
-    if (
-      error.response?.status === 401 &&
-      originalRequest &&
-      !originalRequest._retry &&
-      !originalRequest.url?.includes("/user/refresh")
-    ) {
-      originalRequest._retry = true;
+        const excludedEndpoints = [
+            "/user/login",
+            "/user/register",
+            "/user/refresh",
+            "/user/logout",
+        ];
 
-      try {
-        await axios.post(
-          `${baseURL}/user/refresh`,
-          {},
-          { withCredentials: true }
+        const isExcluded = excludedEndpoints.some(
+            (endpoint) => url.includes(endpoint)
         );
 
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        return Promise.reject(refreshError);
-      }
-    }
+        if (
+            error.response?.status !== 401 ||
+            !originalRequest ||
+            originalRequest._retry ||
+            isExcluded
+        ) {
+            return Promise.reject(error);
+        }
 
-    return Promise.reject(error);
-  }
+        originalRequest._retry = true;
+
+        try {
+            await axios.post(
+                `${baseURL}/user/refresh`,
+                {},
+                { withCredentials: true }
+            );
+
+            return axiosInstance(originalRequest);
+        } catch (refreshError) {
+            return Promise.reject(refreshError);
+        }
+    }
 );
+

@@ -1,8 +1,47 @@
-import { useSelector } from 'react-redux'
-import { Link, NavLink } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { logoutUser, logout } from '../redux/userSlice'
+import { useEffect, useState } from 'react'
+import { fetchCart, resetCart } from '../redux/cartSlice'
 
 function Navbar() {
   const user = useSelector((state) => state.user.user)
+  const navigate=useNavigate()
+  const dispatch=useDispatch()
+ const [loggingOut, setLoggingOut] = useState(false);
+
+ const handleLogout = async () => {
+    setLoggingOut(true)
+
+    try {
+        await dispatch(logoutUser()).unwrap()
+    } catch (error) {
+        console.error('Logout request failed:', error)
+    } finally {
+        dispatch(logout())
+        dispatch(resetCart())
+        setLoggingOut(false)
+        navigate('/', { replace: true })
+    }
+}
+
+
+  const items = useSelector(
+    (state) => state.cart.cart?.items || []
+)
+
+const cartCount = items.reduce(
+    (total, item) => total + item.quantity,
+    0
+)
+
+useEffect(() => {
+    if (user) {
+        dispatch(fetchCart())
+    } else {
+        dispatch(resetCart())
+    }
+}, [dispatch, user])
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#e7dfd2] bg-[#f7f3ee]/90 backdrop-blur-md">
@@ -25,7 +64,19 @@ function Navbar() {
           >
             Products
           </NavLink>
-
+          {user && user.role !== 'admin' && (
+    <NavLink
+        to="/cart"
+        className={({ isActive }) =>
+            `nav-pill ${isActive ? 'active' : ''}`
+        }
+    >
+        Cart
+        <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-[#243a2f] px-1.5 py-0.5 text-xs text-white">
+            {cartCount}
+        </span>
+    </NavLink>
+)}
           {user?.role === 'admin' && (
             <NavLink
               to="/admin/products"
@@ -36,9 +87,19 @@ function Navbar() {
           )}
 
           {user ? (
-            <span className="hidden text-sm font-medium text-[#435448] sm:inline">
+            <div>
+              <span className="hidden text-sm font-medium text-[#435448] sm:inline">
               Hi, {user.name}
             </span>
+             <button
+                        type="button"
+                        onClick={handleLogout}
+                        disabled={loggingOut}
+                        className="rounded-lg border border-white/25 px-3 py-2 text-sm font-semibold hover:bg-white/10 disabled:opacity-60"
+                    >
+                        {loggingOut ? "Signing out..." : "Logout"}
+                    </button>
+              </div>
           ) : (
             <>
               <NavLink
@@ -55,6 +116,7 @@ function Navbar() {
               </NavLink>
             </>
           )}
+
         </div>
       </nav>
     </header>

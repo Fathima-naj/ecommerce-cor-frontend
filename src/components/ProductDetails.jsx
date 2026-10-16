@@ -2,11 +2,17 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { getProductById } from '../redux/productSlice'
+import { addToCart } from "../redux/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 function ProductDetails() {
     const { id } = useParams()
     const dispatch = useDispatch()
     const { product, loading, error } = useSelector((state) => state.product)
+
+const navigate = useNavigate();
+
+const { user } = useSelector((state) => state.user);
 
     useEffect(() => {
         if (id) {
@@ -97,6 +103,26 @@ function ProductDetails() {
                                     {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                                 </dd>
                             </div>
+                            <button
+    type="button"
+    onClick={() => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
+        dispatch(
+            addToCart({
+                productId: product._id,
+                quantity: 1,
+            })
+        );
+    }}
+    disabled={product.stock <= 0}
+    className="rounded-lg bg-black px-6 py-3 font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
+>
+    {product.stock <= 0 ? "Out of Stock" : "Add to Cart"}
+</button>
                         </div>
 
                         <Link to="/products" className="premium-button mt-9 w-full sm:w-auto px-6">
