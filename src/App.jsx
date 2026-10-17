@@ -21,6 +21,7 @@ import AdminProductList from "./admin/ProductList";
 import { getProfile } from "./redux/userSlice";
 import "./App.css";
 import Cart from "./components/Cart";
+import Wishlist from "./components/Wishlist";
 
 export default function App() {
     const dispatch = useDispatch();
@@ -55,6 +56,7 @@ export default function App() {
                             <Cart/>
                         }
                         />
+                        <Route path="/wishlist" element={<Wishlist />} />
                         
                     </Route>
                 </Route>

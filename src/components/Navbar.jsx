@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { logoutUser, logout } from '../redux/userSlice'
 import { useEffect, useState } from 'react'
 import { fetchCart, resetCart } from '../redux/cartSlice'
+import { resetWishlist } from "../redux/wishlistSlice";
 
 function Navbar() {
   const user = useSelector((state) => state.user.user)
@@ -21,6 +22,7 @@ function Navbar() {
         dispatch(logout())
         dispatch(resetCart())
         setLoggingOut(false)
+        dispatch(resetWishlist());
         navigate('/', { replace: true })
     }
 }
@@ -75,6 +77,16 @@ useEffect(() => {
         <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-[#243a2f] px-1.5 py-0.5 text-xs text-white">
             {cartCount}
         </span>
+    </NavLink>
+)}
+{user && user.role !== "admin" && (
+    <NavLink
+        to="/wishlist"
+        className={({ isActive }) =>
+            `nav-pill ${isActive ? "active" : ""}`
+        }
+    >
+        Wishlist
     </NavLink>
 )}
           {user?.role === 'admin' && (
