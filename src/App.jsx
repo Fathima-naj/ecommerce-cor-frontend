@@ -12,6 +12,8 @@ import ProductForm from "./components/ProductForm";
 import UpdateProduct from "./components/UpdateProduct";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import Checkout from "./components/Checkout";
+import MyOrders from "./components/MyOrders";
 
 import PublicLayout from "./layouts/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout";
@@ -57,7 +59,8 @@ export default function App() {
                         }
                         />
                         <Route path="/wishlist" element={<Wishlist />} />
-                        
+                        <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/my-orders" element={<MyOrders />} />
                     </Route>
                 </Route>
 

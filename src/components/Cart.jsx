@@ -226,17 +226,12 @@ export default function Cart() {
                                 Delivery charges will be calculated at checkout.
                             </p>
 
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    alert(
-                                        "Checkout will be connected in the next step."
-                                    )
-                                }
-                                className="mt-6 w-full rounded-lg bg-black px-5 py-3 font-semibold text-white transition hover:bg-gray-800"
-                            >
-                                Proceed to Checkout
-                            </button>
+                           <Link
+    to="/checkout"
+    className="mt-6 block w-full rounded-lg bg-black px-5 py-3 text-center font-semibold text-white transition hover:bg-gray-800"
+>
+    Proceed to Checkout
+</Link>
                         </aside>
                     </div>
                 )}

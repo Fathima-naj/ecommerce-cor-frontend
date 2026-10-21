@@ -89,6 +89,18 @@ useEffect(() => {
         Wishlist
     </NavLink>
 )}
+
+{user && user.role !== "admin" && (
+    <NavLink
+        to="/my-orders"
+        className={({ isActive }) =>
+            `nav-pill ${isActive ? "active" : ""}`
+        }
+    >
+        My Orders
+    </NavLink>
+)}
+
           {user?.role === 'admin' && (
             <NavLink
               to="/admin/products"
