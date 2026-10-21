@@ -195,9 +195,9 @@ export default function MyOrders() {
                                         Payment method
                                     </p>
                                     <p className="mt-1 font-medium text-gray-900">
-                                        {order.paymentMethod === "COD"
-                                            ? "Cash on Delivery"
-                                            : order.paymentMethod}
+                                        {order.paymentMethod === "Razorpay"
+    ? "Razorpay"
+    : "Cash on Delivery"}
                                     </p>
 
                                     <p className="mt-4 text-sm text-gray-500">

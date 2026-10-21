@@ -65,6 +65,9 @@ export default function AdminNavbar() {
                     >
                         Add Product
                     </NavLink>
+                    <NavLink to="/admin/orders" className={navClass}>
+    Manage Orders
+</NavLink>
 
                     <Link
                         to="/products"

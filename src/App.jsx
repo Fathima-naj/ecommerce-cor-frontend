@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import Checkout from "./components/Checkout";
 import MyOrders from "./components/MyOrders";
+import OrderManagement from "./admin/OrderManagement";
 
 import PublicLayout from "./layouts/PublicLayout";
 import AdminLayout from "./layouts/AdminLayout";
@@ -82,6 +83,11 @@ export default function App() {
                         <Route
                             path="/admin/products/:id/edit"
                             element={<UpdateProduct />}
+                        />
+                         
+                        <Route
+                        path="/admin/orders"
+                        element={<OrderManagement />}
                         />
                     </Route>
                 </Route>
